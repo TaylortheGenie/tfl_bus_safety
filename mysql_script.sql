@@ -38,6 +38,10 @@ Borough;					text;	NO;				NULL;
 "Victims Age";				text;	NO;				NULL;
 */
 
+-- How many samples were recorded? --
+SELECT COUNT(*) FROM bus_safety;
+-- 23,158 samples were recorded.
+
 -- Convert the Date of Incident column type --
 ALTER TABLE bus_safety 
 MODIFY COLUMN `Date Of Incident` DATETIME;
@@ -46,6 +50,20 @@ MODIFY COLUMN `Date Of Incident` DATETIME;
 SELECT COUNT(DISTINCT Borough) FROM bus_safety;
 -- 35 locations were recorded for the dataset 
 
+-- Rank the severity of injuries based on their frequency and determine the ratio with respect to sample size.
+SELECT `Injury Result Description`, COUNT(*) AS Frequency, COUNT(`Injury Result Description`) / 23158 AS Ratio
+FROM bus_safety
+GROUP BY `Injury Result Description`
+ORDER BY Frequency DESC;
+/*OUTPUT: 
+"Injury Result Description";Frequency;Ratio
+"Injuries treated on scene";17336;0.7486
+"Taken to Hospital – Reported Serious Injury or Severity Unknown";2994;0.1293
+"Reported Minor Injury - Treated at Hospital";2786;0.1203
+Fatal;42;0.0018
+*/
+
+-- What kind of Iinjuries and incidents recurred frequently in the various locations?
 
 
 
