@@ -1,0 +1,13 @@
+Field;Type;Null;Key;Default;Extra
+Year;int;NO;NULL;
+"Date Of Incident";text;NO;NULL;
+Route;text;NO;NULL;
+Operator;text;NO;NULL;
+"Group Name";text;NO;NULL;
+"Bus Garage";text;NO;NULL;
+Borough;text;NO;NULL;
+"Injury Result Description";text;NO;NULL;
+"Incident Event Type";text;NO;NULL;
+"Victim Category";text;NO;NULL;
+"Victims Sex";text;NO;NULL;
+"Victims Age";text;NO;NULL;
