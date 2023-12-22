@@ -11,40 +11,35 @@ SELECT * FROM bus_safety
 LIMIT 5;
 
 /* OUTPUT:
-Year + Date Of Incident +Route +   Operator   +Group Name+	"Bus Garage";			Borough;				"Injury Result Description";										"Incident Event Type";	"Victim Category";	"Victims Sex";	"Victims Age"
-2015 | 	  01-01-15      |  1   |London General| Go-Ahead |		"Garage Not Available";	Southwark;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Child
-2015 |    01-01-15      |  4   |   Metroline  |Metroline |		"Garage Not Available";	Islington;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Unknown
-2015 |	  01-01-15      |  5   |  East London |Stagecoach|	"Garage Not Available";	Havering;				"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
-2015 |	  01-01-15		|  5   |  East London |Stagecoach|	"Garage Not Available";	"None London Borough";	"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
-2015 |	  01-01-15      |  6   |   Metroline  |Metroline |		"Garage Not Available";	Westminster;			"Reported Minor Injury - Treated at Hospital";						"Onboard Injuries";		Pedestrian;			Female;			Elderly
+Year + Date Of Incident +Route +   Operator   +Group Name+     Bus Garage     +      Borough      +                   Injury Result Description                   +Incident Event Type+Victim Category+Victims Sex+Victims Age+
+2015 | 	  01-01-15      |  1   |London General| Go-Ahead |Garage Not Available|     Southwark     |                   Injuries treated on scene                   | Onboard Injuries  |   Passenger   |    Male   |   Child   |
+2015 |    01-01-15      |  4   |   Metroline  |Metroline |Garage Not Available|     Islington     |                   Injuries treated on scene                   |  Onboard Injuries |   Passenger   |    Male   |  Unknown  |
+2015 |	  01-01-15      |  5   |  East London |Stagecoach|Garage Not Available|     Havering      |Taken to Hospital – Reported Serious Injury or Severity Unknown|  Onboard Injuries |   Passenger   |    Male   |  Elderly  |
+2015 |	  01-01-15      |  5   |  East London |Stagecoach|Garage Not Available|None London Borough|Taken to Hospital – Reported Serious Injury or Severity Unknown|  Onboard Injuries |   Passenger   |    Male   |  Elderly  |
+2015 |	  01-01-15      |  6   |   Metroline  |Metroline |Garage Not Available|    Westminster    |          Reported Minor Injury - Treated at Hospital          |  Onboard Injuries |  Pedestrian   |   Female  |  Elderly  |
 */
 
 -- Display table information --
 DESCRIBE bus_safety;
 
-/*OUTPUT:
-Field;						Type;	Null;	Key;	Default;	Extra
-Year;						int;	NO;				NULL;
-"Date Of Incident";			text;	NO;				NULL;
-Route;						text;	NO;				NULL;
-Operator;					text;	NO;				NULL;
-"Group Name";				text;	NO;				NULL;
-"Bus Garage";				text;	NO;				NULL;
-Borough;					text;	NO;				NULL;
-"Injury Result Description";text;	NO;				NULL;
-"Incident Event Type";		text;	NO;				NULL;
-"Victim Category";			text;	NO;				NULL;
-"Victims Sex";				text;	NO;				NULL;
-"Victims Age";				text;	NO;				NULL;
+/*
+The table has no missing values. However, there were some 'unrecorded' samples, especially with respect to the Victim's information.
+All the column datatypes are text, except for the year.
+However, the 'Date of Incident' column relays date information. Convert this column to a datetime format
 */
 
--- How many samples were recorded? --
-SELECT COUNT(*) FROM bus_safety;
--- 23,158 samples were recorded.
-
--- Convert the Date of Incident column type --
+-- Convert the Date of Incident column type 
 ALTER TABLE bus_safety 
 MODIFY COLUMN `Date Of Incident` DATETIME;
+
+/* 
+ANALYSIS
+
+*/
+
+-- How many samples were recorded? 
+SELECT COUNT(*) FROM bus_safety;
+-- 23,158 samples were recorded.
 
 -- How many locations were recorded? --
 SELECT COUNT(DISTINCT Borough) FROM bus_safety;
@@ -54,14 +49,44 @@ SELECT COUNT(DISTINCT Borough) FROM bus_safety;
 SELECT COUNT(DISTINCT Borough) 
 FROM bus_safety
 WHERE `Injury Result Description` = 'Fatal';
+-- 25 locations recorded fatalities.
 
--- 25 locations recorded fatalities. Which locations were those and how many fatalities were recorded?
+-- Which locations were those and how many fatalities were recorded for the various locations?
 SELECT 
 	Borough, COUNT(*) AS Count
 FROM bus_safety
 WHERE `Injury Result Description` = 'Fatal'
 GROUP BY Borough
 ORDER BY Count DESC;
+/*
+OUTPUT:
+Borough             +Count
+    Westminster     |5
+      Hounslow      |4
+       Barnet       |3
+       Ealing       |2
+Hammersmith & Fulham|2
+      Lewisham      |2
+      Islington     |2
+        Brent       |2
+      Greenwich     |2
+       Camden       |2
+       Newham       |2
+      Haringey      |1
+      Southwark     |1
+      Croydon       |1
+       Harrow       |1
+Kingston upon Thames|1
+   Tower Hamlets    |1
+       Hackney      |1
+       Merton       |1
+     Hillingdon     |1
+None London Borough	|1
+       Bexley       |1
+      Havering      |1
+     Wandsworth     |1
+   Waltham Forest   |1
+*/
 
 -- What were the causes of fatalities in the various locations?
 SELECT 
@@ -69,13 +94,35 @@ SELECT
 FROM bus_safety
 WHERE `Injury Result Description` = 'Fatal'
 GROUP BY Borough, `Incident Event Type`
-ORDER BY Count DESC;
+ORDER BY Count DESC
+-- LIMIT 3
+;
+/*
+OUPTUT(Shortened):
+Borough    +Incident Event Type+Count
+Westminster|Collision Incident |  4
+   Barnet  |Collision Incident |  3
+   Ealing  |Collision Incident |  2
 
--- Which locations reported the most Incidents?
+NOTES; Most incidents that led to fatalities were 'Collision Incident'. A few 'Slip Trip Fall' and 'Onboard Injuries' incidents recurred, with just one instance of 'Assault'.
+Kindly visit the location_fatality_count_based_on_incident.csv file in the output folder.
+*/
+
+-- Which locations recorded the most Incidents?
 SELECT Borough, COUNT(*) AS Frequency
 FROM bus_safety
 GROUP BY Borough
-ORDER BY Frequency DESC;
+ORDER BY Frequency DESC
+LIMIT 5;
+/*
+OUTPUT:
+Borough    +Frequency
+Westminster|  1571
+ Southwark |  1107
+ Lewisham  |  1006
+  Lambeth  |  1107
+  Croydon  |  1032
+*/
 
 -- Rank the severity of injuries based on their frequency and determine the ratio with respect to sample size.
 SELECT `Injury Result Description`, COUNT(*) AS Frequency, COUNT(`Injury Result Description`) / 23158 AS Ratio

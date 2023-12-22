@@ -1,0 +1,31 @@
+Borough;"Incident Event Type";Count
+Westminster;"Collision Incident";4
+Barnet;"Collision Incident";3
+Ealing;"Collision Incident";2
+"Hammersmith & Fulham";"Collision Incident";2
+Hounslow;"Collision Incident";2
+Islington;"Collision Incident";2
+Brent;"Collision Incident";2
+Greenwich;"Collision Incident";2
+Camden;"Collision Incident";2
+Haringey;"Collision Incident";1
+Lewisham;"Collision Incident";1
+Southwark;"Collision Incident";1
+Croydon;"Collision Incident";1
+Harrow;"Collision Incident";1
+Hounslow;"Onboard Injuries";1
+"Kingston upon Thames";"Collision Incident";1
+"Tower Hamlets";"Collision Incident";1
+Newham;"Onboard Injuries";1
+Hackney;"Collision Incident";1
+Merton;"Collision Incident";1
+Hillingdon;"Collision Incident";1
+Hounslow;"Slip Trip Fall";1
+Westminster;Assault;1
+Lewisham;"Slip Trip Fall";1
+"None London Borough";"Collision Incident";1
+Bexley;"Slip Trip Fall";1
+Newham;"Collision Incident";1
+Havering;"Collision Incident";1
+Wandsworth;"Collision Incident";1
+"Waltham Forest";"Collision Incident";1
