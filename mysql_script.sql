@@ -11,12 +11,12 @@ SELECT * FROM bus_safety
 LIMIT 5;
 
 /* OUTPUT:
-Year;	"Date Of Incident";	Route;Operator;	"Group Name";	"Bus Garage";			Borough;				"Injury Result Description";										"Incident Event Type";	"Victim Category";	"Victims Sex";	"Victims Age"
-2015;	01-01-15;1;			"London General";Go-Ahead;		"Garage Not Available";	Southwark;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Child
-2015;	01-01-15;4;			Metroline;		 Metroline;		"Garage Not Available";	Islington;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Unknown
-2015;	01-01-15;5;			"East London";	 Stagecoach;	"Garage Not Available";	Havering;				"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
-2015;	01-01-15;5;			"East London";	 Stagecoach;	"Garage Not Available";	"None London Borough";	"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
-2015;	01-01-15;6;			Metroline;		 Metroline;		"Garage Not Available";	Westminster;			"Reported Minor Injury - Treated at Hospital";						"Onboard Injuries";		Pedestrian;			Female;			Elderly
+Year + Date Of Incident +Route +   Operator   +"Group Name";	"Bus Garage";			Borough;				"Injury Result Description";										"Incident Event Type";	"Victim Category";	"Victims Sex";	"Victims Age"
+2015 | 	  01-01-15      |  1   |London General|Go-Ahead;		"Garage Not Available";	Southwark;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Child
+2015 |    01-01-15      |  4   |   Metroline  | Metroline;		"Garage Not Available";	Islington;				"Injuries treated on scene";										"Onboard Injuries";		Passenger;			Male;			Unknown
+2015 |	  01-01-15      |  5   |  East London |  Stagecoach;	"Garage Not Available";	Havering;				"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
+2015 |	  01-01-15		|  5   |  East London |Stagecoach;	"Garage Not Available";	"None London Borough";	"Taken to Hospital – Reported Serious Injury or Severity Unknown";	"Onboard Injuries";		Passenger;			Male;			Elderly
+2015 |	  01-01-15      |  6   |   Metroline  |	 Metroline;		"Garage Not Available";	Westminster;			"Reported Minor Injury - Treated at Hospital";						"Onboard Injuries";		Pedestrian;			Female;			Elderly
 */
 
 -- Display table information --
@@ -50,6 +50,33 @@ MODIFY COLUMN `Date Of Incident` DATETIME;
 SELECT COUNT(DISTINCT Borough) FROM bus_safety;
 -- 35 locations were recorded for the dataset 
 
+-- How many locations recorded fatalities?
+SELECT COUNT(DISTINCT Borough) 
+FROM bus_safety
+WHERE `Injury Result Description` = 'Fatal';
+
+-- 25 locations recorded fatalities. Which locations were those and how many fatalities were recorded?
+SELECT 
+	Borough, COUNT(*) AS Count
+FROM bus_safety
+WHERE `Injury Result Description` = 'Fatal'
+GROUP BY Borough
+ORDER BY Count DESC;
+
+-- What were the causes of fatalities in the various locations?
+SELECT 
+	Borough, `Incident Event Type`, COUNT(*) AS Count
+FROM bus_safety
+WHERE `Injury Result Description` = 'Fatal'
+GROUP BY Borough, `Incident Event Type`
+ORDER BY Count DESC;
+
+-- Which locations reported the most Incidents?
+SELECT Borough, COUNT(*) AS Frequency
+FROM bus_safety
+GROUP BY Borough
+ORDER BY Frequency DESC;
+
 -- Rank the severity of injuries based on their frequency and determine the ratio with respect to sample size.
 SELECT `Injury Result Description`, COUNT(*) AS Frequency, COUNT(`Injury Result Description`) / 23158 AS Ratio
 FROM bus_safety
@@ -63,7 +90,34 @@ ORDER BY Frequency DESC;
 Fatal;42;0.0018
 */
 
--- What kind of Iinjuries and incidents recurred frequently in the various locations?
+-- Which category of passengers(based on age and gender) were affected the most?
+SELECT `Victims Sex`, `Victims Age`, COUNT(*) AS count
+FROM bus_safety
+WHERE `Victim Category` = 'Passenger'
+GROUP BY `Victims Sex`, `Victims Age`
+ORDER BY count DESC;
+
+-- Relay information on the victims
+SELECT `Victim Category`, COUNT(*) AS count
+FROM bus_safety
+GROUP BY `Victim Category`
+ORDER BY count DESC;
+
+-- For the gender
+SELECT `Victims Sex`, COUNT(*) AS count
+FROM bus_safety
+GROUP BY `Victims Sex`
+ORDER BY count DESC;
+
+-- For the age group
+SELECT `Victims Age`, COUNT(*) AS count
+FROM bus_safety
+GROUP BY `Victims Age`
+ORDER BY count DESC;
+
+
+
+
 
 
 
