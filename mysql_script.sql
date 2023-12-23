@@ -130,37 +130,85 @@ FROM bus_safety
 GROUP BY `Injury Result Description`
 ORDER BY Frequency DESC;
 /*OUTPUT: 
-"Injury Result Description";Frequency;Ratio
-"Injuries treated on scene";17336;0.7486
-"Taken to Hospital – Reported Serious Injury or Severity Unknown";2994;0.1293
-"Reported Minor Injury - Treated at Hospital";2786;0.1203
-Fatal;42;0.0018
+Injury Result Description                                       +Frequency+Ratio
+                    Injuries treated on scene                   |  17336  | 0.7486
+Taken to Hospital – Reported Serious Injury or Severity Unknown |   2994  | 0.1293
+            Reported Minor Injury - Treated at Hospital         |   2786  | 0.1203
+						       Fatal                            |    42   | 0.0018
 */
 
--- Which category of passengers(based on age and gender) were affected the most?
-SELECT `Victims Sex`, `Victims Age`, COUNT(*) AS count
-FROM bus_safety
-WHERE `Victim Category` = 'Passenger'
-GROUP BY `Victims Sex`, `Victims Age`
-ORDER BY count DESC;
-
--- Relay information on the victims
-SELECT `Victim Category`, COUNT(*) AS count
+-- Relay information on the victims based on their category
+SELECT `Victim Category`, COUNT(*) AS Count
 FROM bus_safety
 GROUP BY `Victim Category`
 ORDER BY count DESC;
+/*
+OUTPUT:
+Victim Category            + Count
+         Passenger         | 18828
+		Pedestrian         | 1612
+        Bus Driver         | 1484
+3rd Party driver / Occupant|  573
+         Cyclist           |  275
+     Member Of Public      |  127 
+       Motorcyclist        |  102
+	Operational Staff      |  59
+         Cyclist           |  33
+        Conductor          |  28
+          Other            |  16
+	Contractor Staff       |  6
+   Non-Operational Staff   |  4
+        TfL Staff          |  4
+	  Motorcyclist         |  4
+    Insufficient Data      |  2
+  Operations staff (other) |  1
+*/
 
 -- For the gender
-SELECT `Victims Sex`, COUNT(*) AS count
+SELECT `Victims Sex`, COUNT(*) AS Count
 FROM bus_safety
 GROUP BY `Victims Sex`
 ORDER BY count DESC;
+/*
+OUTPUT:
+Victims Sex + Count
+   Female   | 11847
+    Male    |  7709
+   Unknown  |  3602
+*/
 
 -- For the age group
-SELECT `Victims Age`, COUNT(*) AS count
+SELECT `Victims Age`, COUNT(*) AS Count
 FROM bus_safety
 GROUP BY `Victims Age`
 ORDER BY count DESC;
+/*
+OUTPUT:
+Victims Age + Count
+   Adult    | 10754 
+  Unknown   |  7135
+  Elderly   |  2769
+   Child    |  2181
+Youth	319
+*/
+
+-- Which category of passengers based on age and gender were affected the most?
+SELECT `Victims Sex`, `Victims Age`, COUNT(*) AS Count
+FROM bus_safety
+WHERE `Victim Category` = 'Passenger'
+GROUP BY `Victims Sex`, `Victims Age`
+ORDER BY count DESC
+-- LIMIT 5
+;
+/*
+OUTPUT:
+Victims Sex + Victims Age + Count
+Female	Adult	5460
+Female	Unknown	2531
+Unknown	Unknown	2522
+Male	Adult	2190
+Female	Elderly	1791
+*/
 
 
 
