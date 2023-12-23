@@ -81,7 +81,7 @@ Kingston upon Thames|1
        Hackney      |1
        Merton       |1
      Hillingdon     |1
-None London Borough	|1
+None London Borough |1
        Bexley       |1
       Havering      |1
      Wandsworth     |1
@@ -159,7 +159,7 @@ Victim Category            + Count
 	Contractor Staff       |  6
    Non-Operational Staff   |  4
         TfL Staff          |  4
-	  Motorcyclist         |  4
+      Motorcyclist         |  4
     Insufficient Data      |  2
   Operations staff (other) |  1
 */
@@ -189,7 +189,7 @@ Victims Age + Count
   Unknown   |  7135
   Elderly   |  2769
    Child    |  2181
-Youth	319
+   Youth    |   319
 */
 
 -- Which category of passengers based on age and gender were affected the most?
@@ -203,11 +203,11 @@ ORDER BY count DESC
 /*
 OUTPUT:
 Victims Sex + Victims Age + Count
-Female	Adult	5460
-Female	Unknown	2531
-Unknown	Unknown	2522
-Male	Adult	2190
-Female	Elderly	1791
+   Female   |    Adult    |  5460
+   Female   |   Unknown   |  2531
+   Unknown  |   Unknown   |  2522
+	Male    |    Adult    |  2190
+   Female   |   Elderly   |  1791
 */
 
 
