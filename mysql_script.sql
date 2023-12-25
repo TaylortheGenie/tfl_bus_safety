@@ -30,7 +30,7 @@ However, the 'Date of Incident' column relays date information. Convert this col
 
 -- Convert the Date of Incident column type 
 ALTER TABLE bus_safety 
-MODIFY COLUMN `Date Of Incident` DATETIME;
+MODIFY COLUMN `Date Of Incident` DATE;
 
 /* 
 ANALYSIS
@@ -53,14 +53,14 @@ WHERE `Injury Result Description` = 'Fatal';
 
 -- Which locations were those and how many fatalities were recorded for the various locations?
 SELECT 
-	Borough, COUNT(*) AS Count
+	Borough, COUNT(*) AS Fatalities
 FROM bus_safety
 WHERE `Injury Result Description` = 'Fatal'
 GROUP BY Borough
-ORDER BY Count DESC;
+ORDER BY Fatalities DESC;
 /*
 OUTPUT:
-Borough             +Count
+Borough             +Fatalities
     Westminster     |5
       Hounslow      |4
        Barnet       |3
@@ -90,16 +90,16 @@ None London Borough |1
 
 -- What were the causes of fatalities in the various locations?
 SELECT 
-	Borough, `Incident Event Type`, COUNT(*) AS Count
+	Borough, `Incident Event Type`, COUNT(*) AS Fatalities
 FROM bus_safety
 WHERE `Injury Result Description` = 'Fatal'
 GROUP BY Borough, `Incident Event Type`
-ORDER BY Count DESC
+ORDER BY Fatalities DESC
 -- LIMIT 3
 ;
 /*
 OUPTUT(Shortened):
-Borough    +Incident Event Type+Count
+Borough    +Incident Event Type+Fatalities
 Westminster|Collision Incident |  4
    Barnet  |Collision Incident |  3
    Ealing  |Collision Incident |  2
@@ -146,7 +146,7 @@ ORDER BY count DESC;
 OUTPUT:
 Victim Category            + Count
          Passenger         | 18828
-		Pedestrian         | 1612
+        Pedestrian         | 1612
         Bus Driver         | 1484
 3rd Party driver / Occupant|  573
          Cyclist           |  275
@@ -206,15 +206,96 @@ Victims Sex + Victims Age + Count
    Female   |    Adult    |  5460
    Female   |   Unknown   |  2531
    Unknown  |   Unknown   |  2522
-	Male    |    Adult    |  2190
+    Male    |    Adult    |  2190
    Female   |   Elderly   |  1791
 */
 
+-- Which year recorded the most incidents?
+SELECT `Year`, COUNT(*) AS Incidents
+FROM bus_safety
+GROUP BY Year
+ORDER BY Incidents ASC;
+/*
+OUTPUT:
+Year + Incidents
+2018 | 4777
+2015 | 5715
+2016 | 6093
+2017 | 6573
+*/
 
+-- Examine the year, 2018
+SELECT Year, `Date of Incident`
+FROM bus_safety
+WHERE Year = 2018
+;
+/*
+It seems that for the year 2018, incidents weren't recorded for the whole year. With the last recorded month of 2018 being September.
+Confirm this and examine the remaining years 
+*/
 
+SELECT Year, MONTH(`Date Of Incident`) AS incident_month
+FROM bus_safety
+GROUP BY Year, incident_month
+ORDER BY Year, incident_month;
+/*
+As expected, the year 2018 only had records till September, while the remaining years had records for all the month. 
+This explain why there was a steady increment in incidents as the  years increased and a decline for 2018.
+Refer to the incidents_by_year_and_month.csv file in the outputs folder.
+*/
 
+-- Were particular seasons of the years contributing factors to the incidents?
+SELECT QUARTER(`Date Of Incident`) AS incident_quarter, COUNT(`Incident Event Type`) AS total_incidents
+FROM bus_safety
+GROUP BY incident_quarter
+ORDER BY 2 DESC;
+/*
+OUTPUT:
+incident_quarter + total_incidents
+         3       |     6390
+         2       |     6206
+         1       |     5719
+         4       |     4843
 
+Among the 4 years, incidents occured the most from July to September. 
+*/
 
+-- Which seasons had the most incidents with respect to the various years?
+SELECT Year, QUARTER(`Date Of Incident`) AS incident_quarter, COUNT(`Incident Event Type`) AS quarterly_incidents
+FROM bus_safety
+GROUP BY Year, incident_quarter
+ORDER BY 3 DESC
+-- LIMIT 5
+;
+/*
+OUTPUT:
+Year + incident_quarter + quarterly_incidents
+2017 |         3        |        1762
+2017 |         4        |        1721
+2018 |         2        |        1653
+2016 |         4        |        1634
+2016 |         3        |        1602
 
+Check the total_incidents_by_year_and_quarter.csv file for the full table
+*/
 
+-- How many Routes were used?
+SELECT COUNT(DISTINCT Route)
+FROM bus_safety;
+-- 612 routes were used
+
+-- Which routes were the most dangerous?
+SELECT Route, COUNT(`Incident Event Type`) AS Incidents
+FROM bus_safety
+GROUP BY Route
+ORDER BY 2 DESC
+LIMIT 5
+;
+
+SELECT * FROM bus_safety;
+
+SELECT Operator, `Group Name`, COUNT(`Incident Event Type`) AS Incidents
+FROM bus_safety
+GROUP BY Operator, `Group Name`
+ORDER BY 3 DESC;
  
