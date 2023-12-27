@@ -150,11 +150,11 @@ Victim Category            + Count
          Cyclist           |  275
      Member Of Public      |  127 
        Motorcyclist        |  102
-	Operational Staff      |  59
+     Operational Staff     |  59
          Cyclist           |  33
         Conductor          |  28
           Other            |  16
-	Contractor Staff       |  6
+    Contractor Staff       |  6
    Non-Operational Staff   |  4
         TfL Staff          |  4
       Motorcyclist         |  4
