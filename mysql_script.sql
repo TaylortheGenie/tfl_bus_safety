@@ -1,10 +1,13 @@
+/*
+This SQL script aims to provide analysis on incidents regarding the public bus transport systems in London from 2015 to 2018 using MySQL.
+A Tableau dashboard will also be provided to provided a visual representation on incidents based on location, season, and so on.
+Kindly check the README file for the link to the Tableau dashboard.
+The questions aimed to be answered should be above the various SQL statements, with a general report on insights made in the README file.
+*/
+
 CREATE SCHEMA tfl_bus_safety;
 
 USE tfl_bus_safety;
-
-/*
-This is a brief introductory paragraph TBD later
-*/
 
 -- View the table --
 SELECT * FROM bus_safety
@@ -31,11 +34,6 @@ However, the 'Date of Incident' column relays date information. Convert this col
 -- Convert the Date of Incident column type 
 ALTER TABLE bus_safety 
 MODIFY COLUMN `Date Of Incident` DATE;
-
-/* 
-ANALYSIS
-
-*/
 
 -- How many samples were recorded? 
 SELECT COUNT(*) FROM bus_safety;
@@ -289,13 +287,38 @@ SELECT Route, COUNT(`Incident Event Type`) AS Incidents
 FROM bus_safety
 GROUP BY Route
 ORDER BY 2 DESC
-LIMIT 5
+-- LIMIT 5
 ;
+/*
+OUTPUT:
+Route + Incidents
+  OOS |    321
+  18  |    191
+  55  |    177
+  24  |    165
+  73  |    156
+Kindly refer to the incidents_by_route.csv file in the outputs folder for the full table
+*/
 
-SELECT * FROM bus_safety;
 
-SELECT Operator, `Group Name`, COUNT(`Incident Event Type`) AS Incidents
+-- How many service providers were present?
+SELECT COUNT(DISTINCT Operator)
+FROM bus_safety;
+-- There were 25 service providers
+
+-- Which service providers recorded the most incidents?
+SELECT Operator, COUNT(`Incident Event Type`) AS Incidents
 FROM bus_safety
-GROUP BY Operator, `Group Name`
-ORDER BY 3 DESC;
- 
+GROUP BY Operator
+ORDER BY 2 DESC
+-- LIMIT 5
+;
+/*
+OUTPUT:
+      Operator     + Incidents
+     Metroline     |   3457
+Arriva London North|   3208
+    East London    |   2402
+   London United   |   2263
+      Selkent      |   1808
+*/
