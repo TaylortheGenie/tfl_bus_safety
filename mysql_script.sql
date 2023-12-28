@@ -132,7 +132,7 @@ Injury Result Description                                       +Frequency+Ratio
                     Injuries treated on scene                   |  17336  | 0.7486
 Taken to Hospital – Reported Serious Injury or Severity Unknown |   2994  | 0.1293
             Reported Minor Injury - Treated at Hospital         |   2786  | 0.1203
-						       Fatal                            |    42   | 0.0018
+                              Fatal                             |    42   | 0.0018
 */
 
 -- Relay information on the victims based on their category
@@ -173,6 +173,25 @@ Victims Sex + Count
    Female   | 11847
     Male    |  7709
    Unknown  |  3602
+*/
+
+-- Which gender group accounted for most fatalities?
+SELECT `Victims Sex`, `Victim Category`, COUNT(*) AS Fatalities
+FROM bus_safety
+WHERE `Injury Result Description` = 'Fatal'
+GROUP BY `Victims Sex`, `Victim Category`
+ORDER BY 2 DESC;
+/*
+OUTPUT:
+Victims Sex +       Victim Category       + Fatalities
+    Male    |          Pedestrian         |    20
+   Female   |          Pedestrian         |    8
+   Female   |          Passenger          |    1
+    Male    |          Passenger          |    5
+    Male    |        Motorcyclist         |    4
+    Male    |           Cyclist           |    2
+    Male    | 3rd Party driver / Occupant |    1
+   Female   | 3rd Party driver / Occupant |    1
 */
 
 -- For the age group
