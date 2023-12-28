@@ -9,7 +9,7 @@ If you find this repository, do not hesitate to reach out. Thanks!
 This repository aims to provide insight on incidents involving bus transport systems within different London Boroughs.
 The types of analysis implemented are explanatory data analysis and exploratory data analysis.
 
-Through MySQL, the explanatory analysis aimed to shed light on the full scope of the data by addressing relatively general enquiries.
+Through MySQL, the explanatory analysis aimed to shed light on the full scope of the data by addressing relatively general enquiries. Check out the SQL [script](./mysql_script.sql) for the explanatory analysis.
 
 For the exploratory analysis, an interactive Tableau dashboard was created, aiming to provide specific information on the dataset, based on the various locations (or Boroughs). Kindly visit the Tableau [link](https://public.tableau.com/app/profile/eugene.taylor.sampson/viz/TFLBusSafetyDashboard_17037098659300/TFLBusSafetyDashboard) for the **interactive** dashboard, and remember to select which Borough you may want insight on!
 
@@ -35,7 +35,7 @@ Special thanks to MakeOverMonday for providing this dataset. Follow the [link](h
 ## Exploratory Analysis
 
 - The dashboard provides information on 6 data aspects, mainly the incidents. These aspects are:
-    - Incident by location; provides the total incidents for the various locations. You click on which location you want to anaylse, and the remaining 5 features will relay insights accordingly.
+    - Incident by location; provides the total incidents for the various locations. You click on which location you want to analyse, and the remaining 5 features will relay insights accordingly.
     - Incident by route; provides the total incidents which occured on the various routes.
     - Incident and injury description; groups the type of event leading to the incident by their injuries and provides the frequecny for the occurences.
     - Incidents over time; relays the total number of incidents by months for the various years.
